@@ -1,0 +1,10 @@
+Dear {0},
+ 
+We have received your application.Your application is currently under review.
+
+We will provide feedback to you on every stage of the recruitment process based on the requirements for the role.
+ 
+We appreciate your interest in working with our Company.
+ 
+Best Regards,
+{2}

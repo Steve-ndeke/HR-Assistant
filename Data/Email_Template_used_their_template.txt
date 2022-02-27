@@ -1,0 +1,18 @@
+Dear {0},
+
+Hope this finds you well.
+
+In your application you have not used the provided template to update your resume.
+Kindly update your resume using the template provided (As an attachment in this mail) and attach it as a PDF file.
+
+Thank you so much for your interest to work with our Company.
+
+For any inquiries please contact us through :
+Telophone Number : 0713878364
+Email              steve.ndeke@thejitu.com
+
+ 
+
+yours faithful,
+
+{1}
