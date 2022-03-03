@@ -1,0 +1,24 @@
+Dear HR,
+
+Hope you are doing fine.
+
+Out of {0} application(s), I have processed {1} apllication(s) and rejected {2} application(s).
+The rejected application(s) could be due to the following reasons;
+
+    1. The apllicant did not use the provided resume template to update their resume.
+    2. The aaplicant did not attach any resume in their application mail.
+
+I have however notified the respective applicant(s) about their mistakes and urged them to reapply .
+
+To those who followed the instructions have been notified accordingly.
+
+PLEASE find attached Excel file containing the application Summary.
+
+Regards,
+
+{3}
+     
+
+
+
+
