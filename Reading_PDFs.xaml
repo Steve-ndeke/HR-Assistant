@@ -133,7 +133,7 @@
           <ActivityAction.Argument>
             <DelegateInArgument x:TypeArguments="x:String" Name="item" />
           </ActivityAction.Argument>
-          <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="1354,4351.33333333333" sap2010:WorkflowViewState.IdRef="Sequence_2">
+          <Sequence DisplayName="Body that loop through the stored attchments" sap:VirtualizedContainerService.HintSize="1354,4351.33333333333" sap2010:WorkflowViewState.IdRef="Sequence_2">
             <Sequence.Variables>
               <Variable x:TypeArguments="ui:UiElement" Name="Skill_Element" />
               <Variable x:TypeArguments="sd:DataTable" Name="dt_DataTable" />
@@ -176,7 +176,7 @@
                 </ui:Target>
               </ui:UiElementExists.Target>
             </ui:UiElementExists>
-            <If Condition="[TemplateExists And Objective And home]" sap:VirtualizedContainerService.HintSize="1312,3434.66666666667" sap2010:WorkflowViewState.IdRef="If_1">
+            <If Condition="[TemplateExists And Objective And home]" DisplayName="If the template contains the 3 elements" sap:VirtualizedContainerService.HintSize="1312,3434.66666666667" sap2010:WorkflowViewState.IdRef="If_1">
               <If.Then>
                 <Sequence sap:VirtualizedContainerService.HintSize="840,3270.66666666667" sap2010:WorkflowViewState.IdRef="Sequence_4">
                   <Sequence.Variables>
