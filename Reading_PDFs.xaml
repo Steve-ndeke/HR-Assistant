@@ -7,6 +7,7 @@
     <x:Property Name="in_SuccessCounter" Type="InArgument(x:Int32)" />
     <x:Property Name="in_FailCounter" Type="InArgument(x:Int32)" />
     <x:Property Name="in_Signature" Type="InArgument(x:String)" />
+    <x:Property Name="in_Config" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
   </x:Members>
   <this:Reading_PDFs.Out_phoneNo>
     <InArgument x:TypeArguments="x:String" />
@@ -14,7 +15,7 @@
   <mva:VisualBasic.Settings>
     <x:Null />
   </mva:VisualBasic.Settings>
-  <sap:VirtualizedContainerService.HintSize>1422.66666666667,5561.33333333333</sap:VirtualizedContainerService.HintSize>
+  <sap:VirtualizedContainerService.HintSize>1090.66666666667,6002</sap:VirtualizedContainerService.HintSize>
   <sap2010:WorkflowViewState.IdRef>Reading_PDFs_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <scg:List x:TypeArguments="x:String" Capacity="39">
@@ -60,7 +61,7 @@
     </scg:List>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
-    <scg:List x:TypeArguments="AssemblyReference" Capacity="33">
+    <scg:List x:TypeArguments="AssemblyReference" Capacity="34">
       <AssemblyReference>System.Activities</AssemblyReference>
       <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
@@ -94,9 +95,10 @@
       <AssemblyReference>System.Memory</AssemblyReference>
       <AssemblyReference>System.Collections.Immutable</AssemblyReference>
       <AssemblyReference>UiPath.System.Activities.Design</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
     </scg:List>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="Reading_PDFs" sap:VirtualizedContainerService.HintSize="1432.66666666667,5496.66666666667" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="Reading_PDFs" sap:VirtualizedContainerService.HintSize="1100.66666666667,5937.33333333333" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="ui:Window" Name="adobe" />
       <Variable x:TypeArguments="x:String" Name="MailAdress" />
@@ -104,13 +106,17 @@
       <Variable x:TypeArguments="x:String" Name="Template3" />
       <Variable x:TypeArguments="x:String" Name="HRmail" />
       <Variable x:TypeArguments="x:Int32" Name="Count" />
+      <Variable x:TypeArguments="x:TimeSpan" Name="ProcessTime" />
+      <Variable x:TypeArguments="s:Exception" Name="VarException" />
+      <Variable x:TypeArguments="x:String" Name="VarMail" />
     </Sequence.Variables>
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
-    <Assign sap:VirtualizedContainerService.HintSize="1390.66666666667,62" sap2010:WorkflowViewState.IdRef="Assign_1">
+    <ui:MessageBox Caption="{x:Null}" ChosenButton="{x:Null}" AutoCloseAfter="00:00:00" DisplayName="Message Box" sap:VirtualizedContainerService.HintSize="1058.66666666667,85.3333333333333" sap2010:WorkflowViewState.IdRef="MessageBox_9" Text="[TimeSpan.FromSeconds(CInt(in_Config(&quot;Delay&quot;)))]" />
+    <Assign sap:VirtualizedContainerService.HintSize="1058.66666666667,62" sap2010:WorkflowViewState.IdRef="Assign_1">
       <Assign.To>
         <OutArgument x:TypeArguments="s:String[]">[out_Resumes]</OutArgument>
       </Assign.To>
@@ -118,7 +124,7 @@
         <InArgument x:TypeArguments="s:String[]">[Directory.GetFiles("Data\Inputdata")]</InArgument>
       </Assign.Value>
     </Assign>
-    <Assign sap:VirtualizedContainerService.HintSize="1390.66666666667,62" sap2010:WorkflowViewState.IdRef="Assign_2">
+    <Assign sap:VirtualizedContainerService.HintSize="1058.66666666667,62" sap2010:WorkflowViewState.IdRef="Assign_2">
       <Assign.To>
         <OutArgument x:TypeArguments="x:Int32">[Count]</OutArgument>
       </Assign.To>
@@ -126,30 +132,40 @@
         <InArgument x:TypeArguments="x:Int32">[Directory.GetFiles("Data\Inputdata").Count]</InArgument>
       </Assign.Value>
     </Assign>
-    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="1390.66666666667,94.6666666666667" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Warn" Message="[Count.ToString]" />
-    <ui:ForEach x:TypeArguments="x:String" CurrentIndex="{x:Null}" DisplayName="For Each" sap:VirtualizedContainerService.HintSize="1390.66666666667,4479.33333333333" sap2010:WorkflowViewState.IdRef="ForEach`1_2" Values="[out_Resumes]">
+    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="1058.66666666667,94.6666666666667" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Warn" Message="[Count.ToString]" />
+    <ui:ForEach x:TypeArguments="x:String" CurrentIndex="{x:Null}" DisplayName="For Each" sap:VirtualizedContainerService.HintSize="1058.66666666667,4794.66666666667" sap2010:WorkflowViewState.IdRef="ForEach`1_2" Values="[out_Resumes]">
       <ui:ForEach.Body>
         <ActivityAction x:TypeArguments="x:String">
           <ActivityAction.Argument>
             <DelegateInArgument x:TypeArguments="x:String" Name="item" />
           </ActivityAction.Argument>
-          <Sequence DisplayName="Body that loop through the stored attchments" sap:VirtualizedContainerService.HintSize="1354,4351.33333333333" sap2010:WorkflowViewState.IdRef="Sequence_2">
+          <Sequence DisplayName="Body that loop through the stored attchments" sap:VirtualizedContainerService.HintSize="1022,4666.66666666667" sap2010:WorkflowViewState.IdRef="Sequence_2">
             <Sequence.Variables>
               <Variable x:TypeArguments="ui:UiElement" Name="Skill_Element" />
               <Variable x:TypeArguments="sd:DataTable" Name="dt_DataTable" />
               <Variable x:TypeArguments="x:Boolean" Name="TemplateExists" />
               <Variable x:TypeArguments="x:Boolean" Name="home" />
               <Variable x:TypeArguments="x:Boolean" Name="Objective" />
+              <Variable x:TypeArguments="s:DateTime" Name="Start_Time" />
             </Sequence.Variables>
             <sap:WorkflowViewStateService.ViewState>
               <scg:Dictionary x:TypeArguments="x:String, x:Object">
                 <x:Boolean x:Key="IsExpanded">True</x:Boolean>
               </scg:Dictionary>
             </sap:WorkflowViewStateService.ViewState>
-            <ui:MessageBox Caption="{x:Null}" ChosenButton="{x:Null}" AutoCloseAfter="00:00:00" DisplayName="Message Box" sap:VirtualizedContainerService.HintSize="1312,85.3333333333333" sap2010:WorkflowViewState.IdRef="MessageBox_1" Text="[item]" />
-            <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="1312,94.6666666666667" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Warn" Message="[item]" />
-            <ui:StartProcess Arguments="{x:Null}" WorkingDirectory="{x:Null}" DisplayName="Start Process" FileName="[item.ToString]" sap:VirtualizedContainerService.HintSize="1312,86.6666666666667" sap2010:WorkflowViewState.IdRef="StartProcess_1" />
-            <ui:UiElementExists DisplayName="Template Element Exists " Exists="[TemplateExists]" sap:VirtualizedContainerService.HintSize="1312,106" sap2010:WorkflowViewState.IdRef="UiElementExists_2">
+            <Assign sap:VirtualizedContainerService.HintSize="980,62" sap2010:WorkflowViewState.IdRef="Assign_5">
+              <Assign.To>
+                <OutArgument x:TypeArguments="s:DateTime">[Start_Time]</OutArgument>
+              </Assign.To>
+              <Assign.Value>
+                <InArgument x:TypeArguments="s:DateTime">[Now()]</InArgument>
+              </Assign.Value>
+            </Assign>
+            <ui:MessageBox Caption="{x:Null}" ChosenButton="{x:Null}" AutoCloseAfter="00:00:00" DisplayName="Message Box" sap:VirtualizedContainerService.HintSize="980,85.3333333333333" sap2010:WorkflowViewState.IdRef="MessageBox_10" Text="[Start_Time.ToString]" />
+            <ui:MessageBox Caption="{x:Null}" ChosenButton="{x:Null}" AutoCloseAfter="00:00:00" DisplayName="Message Box" sap:VirtualizedContainerService.HintSize="980,85.3333333333333" sap2010:WorkflowViewState.IdRef="MessageBox_1" Text="[item]" />
+            <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="980,94.6666666666667" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Warn" Message="[item]" />
+            <ui:StartProcess Arguments="{x:Null}" WorkingDirectory="{x:Null}" DisplayName="Start Process" FileName="[item.ToString]" sap:VirtualizedContainerService.HintSize="980,86.6666666666667" sap2010:WorkflowViewState.IdRef="StartProcess_1" />
+            <ui:UiElementExists DisplayName="Template Element Exists " Exists="[TemplateExists]" sap:VirtualizedContainerService.HintSize="980,106" sap2010:WorkflowViewState.IdRef="UiElementExists_2">
               <ui:UiElementExists.Target>
                 <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="5eff11a0-acb8-4d67-b99a-17332d5ce988" InformativeScreenshot="c12aa4a1090b3e2876f05804d93a5277" Selector="&lt;wnd app='acrobat.exe' cls='AcrobatSDIWindow' title='*.pdf - Adobe Acrobat Reader DC (64-bit)' /&gt;&lt;wnd aaname='Document Pane' cls='AVL_AVView' title='AVScrolledPageView' /&gt;&lt;wnd cls='AVL_AVView' title='AVPageView' /&gt;&lt;ctrl role='client' /&gt;" TimeoutMS="4000">
                   <ui:Target.WaitForReady>
@@ -158,7 +174,7 @@
                 </ui:Target>
               </ui:UiElementExists.Target>
             </ui:UiElementExists>
-            <ui:UiElementExists DisplayName="Home Element Exists " Exists="[home]" sap:VirtualizedContainerService.HintSize="1312,106" sap2010:WorkflowViewState.IdRef="UiElementExists_3">
+            <ui:UiElementExists DisplayName="Home Element Exists " Exists="[home]" sap:VirtualizedContainerService.HintSize="980,106" sap2010:WorkflowViewState.IdRef="UiElementExists_3">
               <ui:UiElementExists.Target>
                 <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="14464cb7-5767-404d-b184-d1b5ba2a7f36" InformativeScreenshot="c5ad7d3015cbe9d1f28a6d34597bde80" Selector="&lt;wnd app='acrobat.exe' cls='AcrobatSDIWindow' title='*.pdf - Adobe Acrobat Reader DC (64-bit)' /&gt;&lt;wnd aaname='Document Pane' cls='AVL_AVView' title='AVScrolledPageView' /&gt;&lt;wnd cls='AVL_AVView' title='AVPageView' /&gt;&lt;ctrl name='First table is the name and contact info layout table. Second ta*' role='table' /&gt;&lt;ctrl role='row' /&gt;&lt;ctrl name='Address icon' role='graphic' /&gt;" TimeoutMS="3000">
                   <ui:Target.WaitForReady>
@@ -167,7 +183,7 @@
                 </ui:Target>
               </ui:UiElementExists.Target>
             </ui:UiElementExists>
-            <ui:UiElementExists DisplayName="Element Exists Objective'" Exists="[Objective]" sap:VirtualizedContainerService.HintSize="1312,106" sap2010:WorkflowViewState.IdRef="UiElementExists_4">
+            <ui:UiElementExists DisplayName="Element Exists Objective'" Exists="[Objective]" sap:VirtualizedContainerService.HintSize="980,106" sap2010:WorkflowViewState.IdRef="UiElementExists_4">
               <ui:UiElementExists.Target>
                 <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="db1e1e2d-4d12-4aaf-ab5c-fb25a2021a2a" InformativeScreenshot="d3db462a3120906fd92f3b9fe0f3de54" Selector="&lt;wnd app='acrobat.exe' cls='AcrobatSDIWindow' title='*.pdf - Adobe Acrobat Reader DC (64-bit)' /&gt;&lt;wnd aaname='Document Pane' cls='AVL_AVView' title='AVScrolledPageView' /&gt;&lt;wnd cls='AVL_AVView' title='AVPageView' /&gt;&lt;ctrl name='First table is the name and contact info layout table. Second ta*' role='table' idx='2' /&gt;&lt;ctrl role='row' /&gt;&lt;ctrl name='Objective icon circle' role='graphic' /&gt;" TimeoutMS="2000">
                   <ui:Target.WaitForReady>
@@ -176,19 +192,20 @@
                 </ui:Target>
               </ui:UiElementExists.Target>
             </ui:UiElementExists>
-            <If Condition="[TemplateExists And Objective And home]" DisplayName="If the template contains the 3 elements" sap:VirtualizedContainerService.HintSize="1312,3434.66666666667" sap2010:WorkflowViewState.IdRef="If_1">
+            <If Condition="[TemplateExists And Objective And home]" DisplayName="If the template contains the 3 elements" sap:VirtualizedContainerService.HintSize="980,3522.66666666667" sap2010:WorkflowViewState.IdRef="If_1">
               <If.Then>
-                <Sequence sap:VirtualizedContainerService.HintSize="840,3270.66666666667" sap2010:WorkflowViewState.IdRef="Sequence_4">
+                <Sequence sap:VirtualizedContainerService.HintSize="508,3358.66666666667" sap2010:WorkflowViewState.IdRef="Sequence_4">
                   <Sequence.Variables>
                     <Variable x:TypeArguments="x:String" Name="Bot_Mail" />
                     <Variable x:TypeArguments="x:Boolean" Name="elementMail" />
+                    <Variable x:TypeArguments="s:DateTime" Name="End_Time" />
                   </Sequence.Variables>
                   <sap:WorkflowViewStateService.ViewState>
                     <scg:Dictionary x:TypeArguments="x:String, x:Object">
                       <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                     </scg:Dictionary>
                   </sap:WorkflowViewStateService.ViewState>
-                  <ui:SendHotkey ClickBeforeTyping="{x:Null}" DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" Activate="True" DisplayName="Send Hotkey" sap:VirtualizedContainerService.HintSize="798,117.333333333333" sap2010:WorkflowViewState.IdRef="SendHotkey_1" Key="num1" KeyModifiers="Ctrl" SpecialKey="True">
+                  <ui:SendHotkey ClickBeforeTyping="{x:Null}" DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" Activate="True" DisplayName="Send Hotkey" sap:VirtualizedContainerService.HintSize="466,117.333333333333" sap2010:WorkflowViewState.IdRef="SendHotkey_1" Key="num1" KeyModifiers="Ctrl" SpecialKey="True">
                     <ui:SendHotkey.Target>
                       <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" Id="e5861f4d-5e65-4fb2-93d4-0b751e8abc57">
                         <ui:Target.TimeoutMS>
@@ -200,80 +217,17 @@
                       </ui:Target>
                     </ui:SendHotkey.Target>
                   </ui:SendHotkey>
-                  <ui:GetFullText IgnoreHidden="{x:Null}" DisplayName="Get Full Text 'row'" sap:VirtualizedContainerService.HintSize="798,106" sap2010:WorkflowViewState.IdRef="GetFullText_4">
-                    <ui:GetFullText.Target>
-                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="c310db4f-8db0-4983-9e2c-1192429d581c" InformativeScreenshot="aa1e4cef36950e8feb6dd22f2f860eca" Selector="&lt;wnd app='acrobat.exe' cls='AcrobatSDIWindow' title='*.pdf - Adobe Acrobat Reader DC (64-bit)' /&gt;&lt;wnd aaname='Document Pane' cls='AVL_AVView' title='AVScrolledPageView' /&gt;&lt;wnd cls='AVL_AVView' title='AVPageView' /&gt;&lt;ctrl name='Top table has skills heading, second table has list of skills an*' role='table' /&gt;&lt;ctrl role='row' /&gt;&lt;nav up='2' /&gt;&lt;ctrl name='Top table has skills heading, second table has list of skills an*' role='table' idx='2' /&gt;&lt;ctrl role='row' /&gt;">
-                        <ui:Target.TimeoutMS>
-                          <InArgument x:TypeArguments="x:Int32" />
-                        </ui:Target.TimeoutMS>
-                        <ui:Target.WaitForReady>
-                          <InArgument x:TypeArguments="ui:WaitForReady" />
-                        </ui:Target.WaitForReady>
-                      </ui:Target>
-                    </ui:GetFullText.Target>
-                    <ui:GetFullText.Text>
-                      <OutArgument x:TypeArguments="x:String">[out_Skill_Set]</OutArgument>
-                    </ui:GetFullText.Text>
-                  </ui:GetFullText>
-                  <ui:GetFullText IgnoreHidden="{x:Null}" DisplayName="Get Full Name" sap:VirtualizedContainerService.HintSize="798,106" sap2010:WorkflowViewState.IdRef="GetFullText_5">
-                    <ui:GetFullText.Target>
-                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="24cb8673-138e-41bd-a8f4-2a6165dea274" InformativeScreenshot="47d053f8469ff9d85ce93a270635dc74" Selector="&lt;wnd app='acrobat.exe' cls='AcrobatSDIWindow' title='*.pdf - Adobe Acrobat Reader DC (64-bit)' /&gt;&lt;wnd aaname='Document Pane' cls='AVL_AVView' title='AVScrolledPageView' /&gt;&lt;wnd cls='AVL_AVView' title='AVPageView' /&gt;&lt;ctrl name='First table is the name and contact info layout table. Second ta*' role='table' /&gt;&lt;ctrl role='row' /&gt;&lt;ctrl role='column header' /&gt;">
-                        <ui:Target.TimeoutMS>
-                          <InArgument x:TypeArguments="x:Int32" />
-                        </ui:Target.TimeoutMS>
-                        <ui:Target.WaitForReady>
-                          <InArgument x:TypeArguments="ui:WaitForReady" />
-                        </ui:Target.WaitForReady>
-                      </ui:Target>
-                    </ui:GetFullText.Target>
-                    <ui:GetFullText.Text>
-                      <OutArgument x:TypeArguments="x:String">[Out_Name]</OutArgument>
-                    </ui:GetFullText.Text>
-                  </ui:GetFullText>
-                  <ui:GetFullText IgnoreHidden="{x:Null}" DisplayName="Get phone Number" sap:VirtualizedContainerService.HintSize="798,106" sap2010:WorkflowViewState.IdRef="GetFullText_6">
-                    <ui:GetFullText.Target>
-                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="9d838b41-36e7-472b-ba67-1ef1cb6da748" InformativeScreenshot="78ccba88050fee333e10a7cf8010d69d" Selector="&lt;wnd app='acrobat.exe' cls='AcrobatSDIWindow' title='*.pdf - Adobe Acrobat Reader DC (64-bit)' /&gt;&lt;wnd aaname='Document Pane' cls='AVL_AVView' title='AVScrolledPageView' /&gt;&lt;wnd cls='AVL_AVView' title='AVPageView' /&gt;&lt;ctrl name='First table is the name and contact info layout table. Second ta*' role='table' /&gt;&lt;ctrl role='row' /&gt;&lt;ctrl name='Phone icon' role='graphic' /&gt;&lt;nav up='1' /&gt;&lt;ctrl name='0*  ' role='text' /&gt;">
-                        <ui:Target.TimeoutMS>
-                          <InArgument x:TypeArguments="x:Int32" />
-                        </ui:Target.TimeoutMS>
-                        <ui:Target.WaitForReady>
-                          <InArgument x:TypeArguments="ui:WaitForReady" />
-                        </ui:Target.WaitForReady>
-                      </ui:Target>
-                    </ui:GetFullText.Target>
-                    <ui:GetFullText.Text>
-                      <OutArgument x:TypeArguments="x:String">[Out_phoneNo]</OutArgument>
-                    </ui:GetFullText.Text>
-                  </ui:GetFullText>
-                  <ui:UiElementExists DisplayName="Element Exists 'text  penina@gmail.com'" Exists="[elementMail]" sap:VirtualizedContainerService.HintSize="798,106" sap2010:WorkflowViewState.IdRef="UiElementExists_5">
-                    <ui:UiElementExists.Target>
-                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="21128e99-5464-45b0-91a9-33eb18100001" InformativeScreenshot="b9461f585ebd99ef493a0f12c8dd8d7e" Selector="&lt;wnd app='acrobat.exe' cls='AcrobatSDIWindow' title='*.pdf - Adobe Acrobat Reader DC (64-bit)' /&gt;&lt;wnd aaname='Document Pane' cls='AVL_AVView' title='AVScrolledPageView' /&gt;&lt;wnd cls='AVL_AVView' title='AVPageView' /&gt;&lt;ctrl name='First table is the name and contact info layout table. Second ta*' role='table' /&gt;&lt;ctrl role='row' /&gt;&lt;ctrl role='text' idx='5' /&gt;">
-                        <ui:Target.TimeoutMS>
-                          <InArgument x:TypeArguments="x:Int32" />
-                        </ui:Target.TimeoutMS>
-                        <ui:Target.WaitForReady>
-                          <InArgument x:TypeArguments="ui:WaitForReady" />
-                        </ui:Target.WaitForReady>
-                      </ui:Target>
-                    </ui:UiElementExists.Target>
-                  </ui:UiElementExists>
-                  <If Condition="[elementMail]" sap:VirtualizedContainerService.HintSize="798,496.666666666667" sap2010:WorkflowViewState.IdRef="If_2">
-                    <sap:WorkflowViewStateService.ViewState>
-                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
-                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-                        <x:Boolean x:Key="IsPinned">False</x:Boolean>
-                      </scg:Dictionary>
-                    </sap:WorkflowViewStateService.ViewState>
-                    <If.Then>
-                      <Sequence sap:VirtualizedContainerService.HintSize="376,332.666666666667" sap2010:WorkflowViewState.IdRef="Sequence_8">
+                  <TryCatch DisplayName="Try Catch" sap:VirtualizedContainerService.HintSize="466,714" sap2010:WorkflowViewState.IdRef="TryCatch_2">
+                    <TryCatch.Try>
+                      <Sequence sap:VirtualizedContainerService.HintSize="840,1780.66666666667" sap2010:WorkflowViewState.IdRef="Sequence_10">
                         <sap:WorkflowViewStateService.ViewState>
                           <scg:Dictionary x:TypeArguments="x:String, x:Object">
                             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                           </scg:Dictionary>
                         </sap:WorkflowViewStateService.ViewState>
-                        <ui:GetFullText IgnoreHidden="{x:Null}" DisplayName="Get Full Mail Address" sap:VirtualizedContainerService.HintSize="334,106" sap2010:WorkflowViewState.IdRef="GetFullText_7">
+                        <ui:GetFullText IgnoreHidden="{x:Null}" DisplayName="Get Full Text 'row'" sap:VirtualizedContainerService.HintSize="798,106" sap2010:WorkflowViewState.IdRef="GetFullText_4">
                           <ui:GetFullText.Target>
-                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="f165fd24-e26d-48da-b900-3a627f3ce389" InformativeScreenshot="975839e4b53f12306675ea03fd404ea9" Selector="&lt;wnd app='acrobat.exe' cls='AcrobatSDIWindow' title='*.pdf - Adobe Acrobat Reader DC (64-bit)' /&gt;&lt;wnd aaname='Document Pane' cls='AVL_AVView' title='AVScrolledPageView' /&gt;&lt;wnd cls='AVL_AVView' title='AVPageView' /&gt;&lt;ctrl name='First table is the name and contact info layout table. Second ta*' role='table' /&gt;&lt;ctrl role='row' /&gt;&lt;ctrl name='*.com   ' role='text' /&gt;">
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="c310db4f-8db0-4983-9e2c-1192429d581c" InformativeScreenshot="aa1e4cef36950e8feb6dd22f2f860eca" Selector="&lt;wnd app='acrobat.exe' cls='AcrobatSDIWindow' title='*.pdf - Adobe Acrobat Reader DC (64-bit)' /&gt;&lt;wnd aaname='Document Pane' cls='AVL_AVView' title='AVScrolledPageView' /&gt;&lt;wnd cls='AVL_AVView' title='AVPageView' /&gt;&lt;ctrl name='Top table has skills heading, second table has list of skills an*' role='table' /&gt;&lt;ctrl role='row' /&gt;&lt;nav up='2' /&gt;&lt;ctrl name='Top table has skills heading, second table has list of skills an*' role='table' idx='2' /&gt;&lt;ctrl role='row' /&gt;">
                               <ui:Target.TimeoutMS>
                                 <InArgument x:TypeArguments="x:Int32" />
                               </ui:Target.TimeoutMS>
@@ -283,25 +237,175 @@
                             </ui:Target>
                           </ui:GetFullText.Target>
                           <ui:GetFullText.Text>
-                            <OutArgument x:TypeArguments="x:String">[MailAdress]</OutArgument>
+                            <OutArgument x:TypeArguments="x:String">[out_Skill_Set]</OutArgument>
                           </ui:GetFullText.Text>
                         </ui:GetFullText>
-                        <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="334,94.6666666666667" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Warn" Message="[&quot;Email Address Found&quot;]" />
+                        <ui:GetFullText IgnoreHidden="{x:Null}" DisplayName="Get Full Name" sap:VirtualizedContainerService.HintSize="798,106" sap2010:WorkflowViewState.IdRef="GetFullText_5">
+                          <ui:GetFullText.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="24cb8673-138e-41bd-a8f4-2a6165dea274" InformativeScreenshot="47d053f8469ff9d85ce93a270635dc74" Selector="&lt;wnd app='acrobat.exe' cls='AcrobatSDIWindow' title='*.pdf - Adobe Acrobat Reader DC (64-bit)' /&gt;&lt;wnd aaname='Document Pane' cls='AVL_AVView' title='AVScrolledPageView' /&gt;&lt;wnd cls='AVL_AVView' title='AVPageView' /&gt;&lt;ctrl name='First table is the name and contact info layout table. Second ta*' role='table' /&gt;&lt;ctrl role='row' /&gt;&lt;ctrl role='column header' /&gt;">
+                              <ui:Target.TimeoutMS>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:Target.TimeoutMS>
+                              <ui:Target.WaitForReady>
+                                <InArgument x:TypeArguments="ui:WaitForReady" />
+                              </ui:Target.WaitForReady>
+                            </ui:Target>
+                          </ui:GetFullText.Target>
+                          <ui:GetFullText.Text>
+                            <OutArgument x:TypeArguments="x:String">[Out_Name]</OutArgument>
+                          </ui:GetFullText.Text>
+                        </ui:GetFullText>
+                        <TryCatch DisplayName="Try Catch" sap:VirtualizedContainerService.HintSize="798,714" sap2010:WorkflowViewState.IdRef="TryCatch_3">
+                          <TryCatch.Try>
+                            <ui:GetFullText IgnoreHidden="{x:Null}" DisplayName="Get phone Number" sap:VirtualizedContainerService.HintSize="334,106" sap2010:WorkflowViewState.IdRef="GetFullText_6">
+                              <ui:GetFullText.Target>
+                                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="9d838b41-36e7-472b-ba67-1ef1cb6da748" InformativeScreenshot="78ccba88050fee333e10a7cf8010d69d" Selector="&lt;wnd app='acrobat.exe' cls='AcrobatSDIWindow' title='*.pdf - Adobe Acrobat Reader DC (64-bit)' /&gt;&lt;wnd aaname='Document Pane' cls='AVL_AVView' title='AVScrolledPageView' /&gt;&lt;wnd cls='AVL_AVView' title='AVPageView' /&gt;&lt;ctrl name='First table is the name and contact info layout table. Second ta*' role='table' /&gt;&lt;ctrl role='row' /&gt;&lt;ctrl name='Phone icon' role='graphic' /&gt;&lt;nav up='1' /&gt;&lt;ctrl name='0*  ' role='text' /&gt;">
+                                  <ui:Target.TimeoutMS>
+                                    <InArgument x:TypeArguments="x:Int32" />
+                                  </ui:Target.TimeoutMS>
+                                  <ui:Target.WaitForReady>
+                                    <InArgument x:TypeArguments="ui:WaitForReady" />
+                                  </ui:Target.WaitForReady>
+                                </ui:Target>
+                              </ui:GetFullText.Target>
+                              <ui:GetFullText.Text>
+                                <OutArgument x:TypeArguments="x:String">[Out_phoneNo]</OutArgument>
+                              </ui:GetFullText.Text>
+                            </ui:GetFullText>
+                          </TryCatch.Try>
+                          <TryCatch.Catches>
+                            <Catch x:TypeArguments="s:Exception" sap:VirtualizedContainerService.HintSize="432,542" sap2010:WorkflowViewState.IdRef="Catch`1_3">
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                              <ActivityAction x:TypeArguments="s:Exception">
+                                <ActivityAction.Argument>
+                                  <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
+                                </ActivityAction.Argument>
+                                <Sequence sap:VirtualizedContainerService.HintSize="426,471.333333333333" sap2010:WorkflowViewState.IdRef="Sequence_12">
+                                  <sap:WorkflowViewStateService.ViewState>
+                                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                    </scg:Dictionary>
+                                  </sap:WorkflowViewStateService.ViewState>
+                                  <ui:ReadTextFile Content="[VarMail]" DisplayName="Read Text File" FileName="Data\Exception_Mail.txt" sap:VirtualizedContainerService.HintSize="384,80.6666666666667" sap2010:WorkflowViewState.IdRef="ReadTextFile_4" />
+                                  <Assign sap:VirtualizedContainerService.HintSize="384,62" sap2010:WorkflowViewState.IdRef="Assign_13">
+                                    <Assign.To>
+                                      <OutArgument x:TypeArguments="s:Exception">[VarException]</OutArgument>
+                                    </Assign.To>
+                                    <Assign.Value>
+                                      <InArgument x:TypeArguments="s:Exception">[Exception]</InArgument>
+                                    </Assign.Value>
+                                  </Assign>
+                                  <ui:SendOutlookMail Account="{x:Null}" Bcc="{x:Null}" Cc="{x:Null}" MailMessage="{x:Null}" ReplyTo="{x:Null}" TimeoutMS="{x:Null}" Body="[String.Format(VarMail,VarException,in_Signature)]" DisplayName="Send Outlook Mail Message" sap:VirtualizedContainerService.HintSize="384,156.666666666667" sap2010:WorkflowViewState.IdRef="SendOutlookMail_4" Importance="Normal" IsBodyHtml="False" IsDraft="False" Sensitivity="Normal" Subject="ERROR" To="[in_Config(&quot;HR_Mail_Address&quot;).ToString]">
+                                    <ui:SendOutlookMail.Files>
+                                      <scg:List x:TypeArguments="InArgument(x:String)" Capacity="0" />
+                                    </ui:SendOutlookMail.Files>
+                                  </ui:SendOutlookMail>
+                                </Sequence>
+                              </ActivityAction>
+                            </Catch>
+                          </TryCatch.Catches>
+                        </TryCatch>
+                        <ui:UiElementExists DisplayName="Element Exists 'text  penina@gmail.com'" Exists="[elementMail]" sap:VirtualizedContainerService.HintSize="798,106" sap2010:WorkflowViewState.IdRef="UiElementExists_5">
+                          <ui:UiElementExists.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="21128e99-5464-45b0-91a9-33eb18100001" InformativeScreenshot="b9461f585ebd99ef493a0f12c8dd8d7e" Selector="&lt;wnd app='acrobat.exe' cls='AcrobatSDIWindow' title='*.pdf - Adobe Acrobat Reader DC (64-bit)' /&gt;&lt;wnd aaname='Document Pane' cls='AVL_AVView' title='AVScrolledPageView' /&gt;&lt;wnd cls='AVL_AVView' title='AVPageView' /&gt;&lt;ctrl name='First table is the name and contact info layout table. Second ta*' role='table' /&gt;&lt;ctrl role='row' /&gt;&lt;ctrl role='text' idx='5' /&gt;">
+                              <ui:Target.TimeoutMS>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:Target.TimeoutMS>
+                              <ui:Target.WaitForReady>
+                                <InArgument x:TypeArguments="ui:WaitForReady" />
+                              </ui:Target.WaitForReady>
+                            </ui:Target>
+                          </ui:UiElementExists.Target>
+                        </ui:UiElementExists>
+                        <If Condition="[elementMail]" sap:VirtualizedContainerService.HintSize="798,496.666666666667" sap2010:WorkflowViewState.IdRef="If_2">
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                          <If.Then>
+                            <Sequence sap:VirtualizedContainerService.HintSize="376,332.666666666667" sap2010:WorkflowViewState.IdRef="Sequence_8">
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                              <ui:GetFullText IgnoreHidden="{x:Null}" DisplayName="Get Full Mail Address" sap:VirtualizedContainerService.HintSize="334,106" sap2010:WorkflowViewState.IdRef="GetFullText_7">
+                                <ui:GetFullText.Target>
+                                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="f165fd24-e26d-48da-b900-3a627f3ce389" InformativeScreenshot="975839e4b53f12306675ea03fd404ea9" Selector="&lt;wnd app='acrobat.exe' cls='AcrobatSDIWindow' title='*.pdf - Adobe Acrobat Reader DC (64-bit)' /&gt;&lt;wnd aaname='Document Pane' cls='AVL_AVView' title='AVScrolledPageView' /&gt;&lt;wnd cls='AVL_AVView' title='AVPageView' /&gt;&lt;ctrl name='First table is the name and contact info layout table. Second ta*' role='table' /&gt;&lt;ctrl role='row' /&gt;&lt;ctrl name='*.com   ' role='text' /&gt;">
+                                    <ui:Target.TimeoutMS>
+                                      <InArgument x:TypeArguments="x:Int32" />
+                                    </ui:Target.TimeoutMS>
+                                    <ui:Target.WaitForReady>
+                                      <InArgument x:TypeArguments="ui:WaitForReady" />
+                                    </ui:Target.WaitForReady>
+                                  </ui:Target>
+                                </ui:GetFullText.Target>
+                                <ui:GetFullText.Text>
+                                  <OutArgument x:TypeArguments="x:String">[MailAdress]</OutArgument>
+                                </ui:GetFullText.Text>
+                              </ui:GetFullText>
+                              <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="334,94.6666666666667" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Warn" Message="[&quot;Email Address Found&quot;]" />
+                            </Sequence>
+                          </If.Then>
+                          <If.Else>
+                            <Sequence sap:VirtualizedContainerService.HintSize="376,186.666666666667" sap2010:WorkflowViewState.IdRef="Sequence_9">
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                              <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="334,94.6666666666667" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Warn" Message="[&quot;Mail not Found&quot;]" />
+                            </Sequence>
+                          </If.Else>
+                        </If>
                       </Sequence>
-                    </If.Then>
-                    <If.Else>
-                      <Sequence sap:VirtualizedContainerService.HintSize="376,186.666666666667" sap2010:WorkflowViewState.IdRef="Sequence_9">
+                    </TryCatch.Try>
+                    <TryCatch.Catches>
+                      <Catch x:TypeArguments="s:Exception" sap:VirtualizedContainerService.HintSize="432,542" sap2010:WorkflowViewState.IdRef="Catch`1_2">
                         <sap:WorkflowViewStateService.ViewState>
                           <scg:Dictionary x:TypeArguments="x:String, x:Object">
                             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
                           </scg:Dictionary>
                         </sap:WorkflowViewStateService.ViewState>
-                        <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="334,94.6666666666667" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Warn" Message="[&quot;Mail not Found&quot;]" />
-                      </Sequence>
-                    </If.Else>
-                  </If>
-                  <ui:ReadTextFile Content="[Bot_Mail]" DisplayName="Read Text File" FileName="Data\Receipt_Mail_template.txt" sap:VirtualizedContainerService.HintSize="798,80.6666666666667" sap2010:WorkflowViewState.IdRef="ReadTextFile_2" />
-                  <TryCatch DisplayName="Try Catch" sap:VirtualizedContainerService.HintSize="798,295.333333333333" sap2010:WorkflowViewState.IdRef="TryCatch_1">
+                        <ActivityAction x:TypeArguments="s:Exception">
+                          <ActivityAction.Argument>
+                            <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
+                          </ActivityAction.Argument>
+                          <Sequence sap:VirtualizedContainerService.HintSize="426,471.333333333333" sap2010:WorkflowViewState.IdRef="Sequence_11">
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                            <ui:ReadTextFile Content="[VarMail]" DisplayName="Read Text File" FileName="Data\Exception_Mail.txt" sap:VirtualizedContainerService.HintSize="384,80.6666666666667" sap2010:WorkflowViewState.IdRef="ReadTextFile_3" />
+                            <Assign sap:VirtualizedContainerService.HintSize="384,62" sap2010:WorkflowViewState.IdRef="Assign_12">
+                              <Assign.To>
+                                <OutArgument x:TypeArguments="s:Exception">[VarException]</OutArgument>
+                              </Assign.To>
+                              <Assign.Value>
+                                <InArgument x:TypeArguments="s:Exception">[Exception]</InArgument>
+                              </Assign.Value>
+                            </Assign>
+                            <ui:SendOutlookMail Account="{x:Null}" Bcc="{x:Null}" Cc="{x:Null}" MailMessage="{x:Null}" ReplyTo="{x:Null}" TimeoutMS="{x:Null}" Body="[String.Format(VarMail,VarException,in_Signature)]" DisplayName="Send Outlook Mail Message" sap:VirtualizedContainerService.HintSize="384,156.666666666667" sap2010:WorkflowViewState.IdRef="SendOutlookMail_3" Importance="Normal" IsBodyHtml="False" IsDraft="False" Sensitivity="Normal" Subject="ERROR" To="[in_Config(&quot;HR_Mail_Address&quot;).ToString]">
+                              <ui:SendOutlookMail.Files>
+                                <scg:List x:TypeArguments="InArgument(x:String)" Capacity="0" />
+                              </ui:SendOutlookMail.Files>
+                            </ui:SendOutlookMail>
+                          </Sequence>
+                        </ActivityAction>
+                      </Catch>
+                    </TryCatch.Catches>
+                  </TryCatch>
+                  <ui:ReadTextFile Content="[Bot_Mail]" DisplayName="Read Text File" FileName="Data\Receipt_Mail_template.txt" sap:VirtualizedContainerService.HintSize="466,80.6666666666667" sap2010:WorkflowViewState.IdRef="ReadTextFile_2" />
+                  <TryCatch DisplayName="Try Catch" sap:VirtualizedContainerService.HintSize="466,295.333333333333" sap2010:WorkflowViewState.IdRef="TryCatch_1">
                     <TryCatch.Try>
                       <ui:SendOutlookMail Account="{x:Null}" Bcc="{x:Null}" Cc="{x:Null}" MailMessage="{x:Null}" ReplyTo="{x:Null}" TimeoutMS="{x:Null}" Body="[String.Format(Bot_Mail,Out_Name,in_Signature)]" DisplayName="Send Outlook Mail Message" sap:VirtualizedContainerService.HintSize="334,156.666666666667" sap2010:WorkflowViewState.IdRef="SendOutlookMail_2" Importance="Normal" IsBodyHtml="False" IsDraft="False" Sensitivity="Normal" Subject="APPLICATION RECEIVED" To="[MailAdress]">
                         <ui:SendOutlookMail.Files>
@@ -336,12 +440,30 @@
                       <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="334,94.6666666666667" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Warn" Message="[&quot;FINALLY&quot;]" />
                     </TryCatch.Finally>
                   </TryCatch>
-                  <ui:MessageBox Caption="{x:Null}" ChosenButton="{x:Null}" AutoCloseAfter="00:00:00" DisplayName="Message Box" sap:VirtualizedContainerService.HintSize="798,85.3333333333333" sap2010:WorkflowViewState.IdRef="MessageBox_2" Text="[out_Skill_Set]" />
-                  <ui:MessageBox Caption="{x:Null}" ChosenButton="{x:Null}" AutoCloseAfter="00:00:00" DisplayName="Message Box" sap:VirtualizedContainerService.HintSize="798,85.3333333333333" sap2010:WorkflowViewState.IdRef="MessageBox_6" Text="[Out_Name]" />
-                  <ui:MessageBox Caption="{x:Null}" ChosenButton="{x:Null}" AutoCloseAfter="00:00:00" DisplayName="Message Box" sap:VirtualizedContainerService.HintSize="798,85.3333333333333" sap2010:WorkflowViewState.IdRef="MessageBox_7" Text="[Out_phoneNo]" />
-                  <ui:BuildDataTable DataTable="[dt_DataTable]" DisplayName="Build Data Table" sap:VirtualizedContainerService.HintSize="798,58.6666666666667" sap2010:WorkflowViewState.IdRef="BuildDataTable_2" TableInfo="&lt;NewDataSet&gt;&#xA;  &lt;xs:schema id=&quot;NewDataSet&quot; xmlns=&quot;&quot; xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:msdata=&quot;urn:schemas-microsoft-com:xml-msdata&quot;&gt;&#xA;    &lt;xs:element name=&quot;NewDataSet&quot; msdata:IsDataSet=&quot;true&quot; msdata:MainDataTable=&quot;TableName&quot; msdata:UseCurrentLocale=&quot;true&quot;&gt;&#xA;      &lt;xs:complexType&gt;&#xA;        &lt;xs:choice minOccurs=&quot;0&quot; maxOccurs=&quot;unbounded&quot;&gt;&#xA;          &lt;xs:element name=&quot;TableName&quot;&gt;&#xA;            &lt;xs:complexType&gt;&#xA;              &lt;xs:sequence&gt;&#xA;                &lt;xs:element name=&quot;Name&quot; msdata:Caption=&quot;&quot; minOccurs=&quot;0&quot;&gt;&#xA;                  &lt;xs:simpleType&gt;&#xA;                    &lt;xs:restriction base=&quot;xs:string&quot;&gt;&#xA;                      &lt;xs:maxLength value=&quot;100&quot; /&gt;&#xA;                    &lt;/xs:restriction&gt;&#xA;                  &lt;/xs:simpleType&gt;&#xA;                &lt;/xs:element&gt;&#xA;                &lt;xs:element name=&quot;Phone_x0020_Number&quot; msdata:Caption=&quot;&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xA;                &lt;xs:element name=&quot;Mail_x0020_Address&quot; msdata:Caption=&quot;&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xA;                &lt;xs:element name=&quot;Skill_x0020_Set&quot; msdata:Caption=&quot;&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xA;              &lt;/xs:sequence&gt;&#xA;            &lt;/xs:complexType&gt;&#xA;          &lt;/xs:element&gt;&#xA;        &lt;/xs:choice&gt;&#xA;      &lt;/xs:complexType&gt;&#xA;    &lt;/xs:element&gt;&#xA;  &lt;/xs:schema&gt;&#xA;&lt;/NewDataSet&gt;" />
-                  <ui:KillProcess AppliesTo="{x:Null}" ContinueOnError="{x:Null}" Process="{x:Null}" DisplayName="Kill Process" sap:VirtualizedContainerService.HintSize="798,135.333333333333" sap2010:WorkflowViewState.IdRef="KillProcess_3" ProcessName="EXCEL" />
-                  <ui:CloseApplication DisplayName="Close Application 'acrobat.exe Jasmine_Res...'" sap:VirtualizedContainerService.HintSize="798,106" sap2010:WorkflowViewState.IdRef="CloseApplication_1">
+                  <ui:MessageBox Caption="{x:Null}" ChosenButton="{x:Null}" AutoCloseAfter="00:00:00" DisplayName="Message Box" sap:VirtualizedContainerService.HintSize="466,85.3333333333333" sap2010:WorkflowViewState.IdRef="MessageBox_2" Text="[out_Skill_Set]" />
+                  <ui:MessageBox Caption="{x:Null}" ChosenButton="{x:Null}" AutoCloseAfter="00:00:00" DisplayName="Message Box" sap:VirtualizedContainerService.HintSize="466,85.3333333333333" sap2010:WorkflowViewState.IdRef="MessageBox_6" Text="[Out_Name]" />
+                  <ui:MessageBox Caption="{x:Null}" ChosenButton="{x:Null}" AutoCloseAfter="00:00:00" DisplayName="Message Box" sap:VirtualizedContainerService.HintSize="466,85.3333333333333" sap2010:WorkflowViewState.IdRef="MessageBox_7" Text="[Out_phoneNo]" />
+                  <Assign sap:VirtualizedContainerService.HintSize="466,62" sap2010:WorkflowViewState.IdRef="Assign_8">
+                    <Assign.To>
+                      <OutArgument x:TypeArguments="s:DateTime">[End_Time]</OutArgument>
+                    </Assign.To>
+                    <Assign.Value>
+                      <InArgument x:TypeArguments="s:DateTime">[Now()]</InArgument>
+                    </Assign.Value>
+                  </Assign>
+                  <ui:MessageBox Caption="{x:Null}" ChosenButton="{x:Null}" AutoCloseAfter="00:00:00" DisplayName="Message Box" sap:VirtualizedContainerService.HintSize="466,85.3333333333333" sap2010:WorkflowViewState.IdRef="MessageBox_11" Text="[End_Time.ToString]" />
+                  <Assign sap:VirtualizedContainerService.HintSize="466,62" sap2010:WorkflowViewState.IdRef="Assign_10">
+                    <Assign.To>
+                      <OutArgument x:TypeArguments="x:TimeSpan">[ProcessTime]</OutArgument>
+                    </Assign.To>
+                    <Assign.Value>
+                      <InArgument x:TypeArguments="x:TimeSpan">[End_Time - Start_Time]</InArgument>
+                    </Assign.Value>
+                  </Assign>
+                  <ui:MessageBox Caption="{x:Null}" ChosenButton="{x:Null}" AutoCloseAfter="00:00:00" DisplayName="Message Box" sap:VirtualizedContainerService.HintSize="466,85.3333333333333" sap2010:WorkflowViewState.IdRef="MessageBox_12" Text="[ProcessTime.ToString]" />
+                  <ui:BuildDataTable DataTable="[dt_DataTable]" DisplayName="Build Data Table" sap:VirtualizedContainerService.HintSize="466,58.6666666666667" sap2010:WorkflowViewState.IdRef="BuildDataTable_2" TableInfo="&lt;NewDataSet&gt;&#xA;  &lt;xs:schema id=&quot;NewDataSet&quot; xmlns=&quot;&quot; xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:msdata=&quot;urn:schemas-microsoft-com:xml-msdata&quot;&gt;&#xA;    &lt;xs:element name=&quot;NewDataSet&quot; msdata:IsDataSet=&quot;true&quot; msdata:MainDataTable=&quot;TableName&quot; msdata:UseCurrentLocale=&quot;true&quot;&gt;&#xA;      &lt;xs:complexType&gt;&#xA;        &lt;xs:choice minOccurs=&quot;0&quot; maxOccurs=&quot;unbounded&quot;&gt;&#xA;          &lt;xs:element name=&quot;TableName&quot;&gt;&#xA;            &lt;xs:complexType&gt;&#xA;              &lt;xs:sequence&gt;&#xA;                &lt;xs:element name=&quot;Name&quot; msdata:Caption=&quot;&quot; minOccurs=&quot;0&quot;&gt;&#xA;                  &lt;xs:simpleType&gt;&#xA;                    &lt;xs:restriction base=&quot;xs:string&quot;&gt;&#xA;                      &lt;xs:maxLength value=&quot;100&quot; /&gt;&#xA;                    &lt;/xs:restriction&gt;&#xA;                  &lt;/xs:simpleType&gt;&#xA;                &lt;/xs:element&gt;&#xA;                &lt;xs:element name=&quot;Phone_x0020_Number&quot; msdata:Caption=&quot;&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xA;                &lt;xs:element name=&quot;Mail_x0020_Address&quot; msdata:Caption=&quot;&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xA;                &lt;xs:element name=&quot;Skill_x0020_Set&quot; msdata:Caption=&quot;&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xA;                &lt;xs:element name=&quot;Process_x0020_Time&quot; msdata:Caption=&quot;&quot; type=&quot;xs:duration&quot; /&gt;&#xA;              &lt;/xs:sequence&gt;&#xA;            &lt;/xs:complexType&gt;&#xA;          &lt;/xs:element&gt;&#xA;        &lt;/xs:choice&gt;&#xA;      &lt;/xs:complexType&gt;&#xA;    &lt;/xs:element&gt;&#xA;  &lt;/xs:schema&gt;&#xA;&lt;/NewDataSet&gt;" />
+                  <ui:KillProcess AppliesTo="{x:Null}" ContinueOnError="{x:Null}" Process="{x:Null}" DisplayName="Kill Process" sap:VirtualizedContainerService.HintSize="466,135.333333333333" sap2010:WorkflowViewState.IdRef="KillProcess_3" ProcessName="EXCEL" />
+                  <ui:CloseApplication DisplayName="Close Application 'acrobat.exe Jasmine_Res...'" sap:VirtualizedContainerService.HintSize="466,106" sap2010:WorkflowViewState.IdRef="CloseApplication_1">
                     <ui:CloseApplication.Target>
                       <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="65f345b9-3944-45a7-8117-b7a933a75db3" InformativeScreenshot="338606a1573e3c348927a99a5a22a099" Selector="&lt;wnd app='acrobat.exe' cls='AcrobatSDIWindow' title='*.pdf - Adobe Acrobat Reader DC (64-bit)' /&gt;">
                         <ui:Target.TimeoutMS>
@@ -353,9 +475,9 @@
                       </ui:Target>
                     </ui:CloseApplication.Target>
                   </ui:CloseApplication>
-                  <ui:AddDataRow DataRow="{x:Null}" ArrayRow="[{Out_Name,Out_phoneNo,out_Skill_Set,MailAdress}]" DataTable="[dt_DataTable]" DisplayName="Add Data Row" sap:VirtualizedContainerService.HintSize="798,190" sap2010:WorkflowViewState.IdRef="AddDataRow_2" />
-                  <ui:AppendRange DataTable="[dt_datatable]" DisplayName="Append Range" sap:VirtualizedContainerService.HintSize="798,114.666666666667" sap2010:WorkflowViewState.IdRef="AppendRange_2" SheetName="Sheet1" WorkbookPath="Data\Outputdata\LogTable.xlsx" />
-                  <Assign sap:VirtualizedContainerService.HintSize="798,62" sap2010:WorkflowViewState.IdRef="Assign_4">
+                  <ui:AddDataRow DataRow="{x:Null}" ArrayRow="[{Out_Name,Out_phoneNo,out_Skill_Set,MailAdress,ProcessTime}]" DataTable="[dt_DataTable]" DisplayName="Add Data Row" sap:VirtualizedContainerService.HintSize="466,190" sap2010:WorkflowViewState.IdRef="AddDataRow_2" />
+                  <ui:AppendRange DataTable="[dt_datatable]" DisplayName="Append Range" sap:VirtualizedContainerService.HintSize="466,114.666666666667" sap2010:WorkflowViewState.IdRef="AppendRange_2" SheetName="Sheet1" WorkbookPath="[in_Config(&quot;Log_Table_Path&quot;).ToString]" />
+                  <Assign sap:VirtualizedContainerService.HintSize="466,62" sap2010:WorkflowViewState.IdRef="Assign_4">
                     <Assign.To>
                       <OutArgument x:TypeArguments="x:Int32">[in_SuccessCounter]</OutArgument>
                     </Assign.To>
@@ -363,7 +485,7 @@
                       <InArgument x:TypeArguments="x:Int32">[in_SuccessCounter + 1]</InArgument>
                     </Assign.Value>
                   </Assign>
-                  <ui:MoveFile ContinueOnError="{x:Null}" Destination="C:\Users\Admin\Documents\UiPath\HR_ASSISTANT\Data\Processed" DisplayName="Move File" sap:VirtualizedContainerService.HintSize="798,162" sap2010:WorkflowViewState.IdRef="MoveFile_2" Overwrite="True" Path="[item]" />
+                  <ui:MoveFile ContinueOnError="{x:Null}" Destination="[in_Config(&quot;Processed_file_Path&quot;).ToString]" DisplayName="Move File" sap:VirtualizedContainerService.HintSize="466,162" sap2010:WorkflowViewState.IdRef="MoveFile_2" Overwrite="True" Path="[item]" />
                 </Sequence>
               </If.Then>
               <If.Else>
@@ -405,15 +527,15 @@
         </ActivityAction>
       </ui:ForEach.Body>
     </ui:ForEach>
-    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="1390.66666666667,94.6666666666667" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Warn" Message="[&quot;sending HR Mail&quot;]" />
-    <ui:ReadTextFile Content="[HRmail]" DisplayName="Read Text File" FileName="Data\HRmail.txt" sap:VirtualizedContainerService.HintSize="1390.66666666667,80.6666666666667" sap2010:WorkflowViewState.IdRef="ReadTextFile_1" />
-    <ui:SendOutlookMail Account="{x:Null}" Bcc="{x:Null}" Cc="{x:Null}" MailMessage="{x:Null}" ReplyTo="{x:Null}" TimeoutMS="{x:Null}" Body="[String.Format(HRmail,Count,in_SuccessCounter,in_FailCounter,in_Signature)]" DisplayName="Send Outlook Mail Message" sap:VirtualizedContainerService.HintSize="1390.66666666667,156.666666666667" sap2010:WorkflowViewState.IdRef="SendOutlookMail_1" Importance="Normal" IsBodyHtml="False" IsDraft="False" Sensitivity="Normal" Subject="APPLICATIONS SUMMARY" To="stevendeke639@gmail.com">
+    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="1058.66666666667,94.6666666666667" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Warn" Message="[&quot;sending HR Mail&quot;]" />
+    <ui:ReadTextFile Content="[HRmail]" DisplayName="Read Text File" FileName="[in_Config(&quot;HR_Mail_Template_Path&quot;).ToString]" sap:VirtualizedContainerService.HintSize="1058.66666666667,80.6666666666667" sap2010:WorkflowViewState.IdRef="ReadTextFile_1" />
+    <ui:SendOutlookMail Account="{x:Null}" Bcc="{x:Null}" Cc="{x:Null}" MailMessage="{x:Null}" ReplyTo="{x:Null}" TimeoutMS="{x:Null}" Body="[String.Format(HRmail,Count,in_SuccessCounter,in_FailCounter,in_Signature)]" DisplayName="Send Outlook Mail Message" sap:VirtualizedContainerService.HintSize="1058.66666666667,156.666666666667" sap2010:WorkflowViewState.IdRef="SendOutlookMail_1" Importance="Normal" IsBodyHtml="False" IsDraft="False" Sensitivity="Normal" Subject="APPLICATIONS SUMMARY" To="[in_Config(&quot;HR_Mail_Address&quot;).ToString]">
       <ui:SendOutlookMail.Files>
         <scg:List x:TypeArguments="InArgument(x:String)" Capacity="4">
           <InArgument x:TypeArguments="x:String">C:\Users\Admin\Documents\UiPath\HR_ASSISTANT\Data\Outputdata\LogTable.xlsx</InArgument>
         </scg:List>
       </ui:SendOutlookMail.Files>
     </ui:SendOutlookMail>
-    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="1390.66666666667,94.6666666666667" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Warn" Message="[&quot;Sent Application Summary to HR&quot;]" />
+    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="1058.66666666667,94.6666666666667" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Warn" Message="[&quot;Sent Application Summary to HR&quot;]" />
   </Sequence>
 </Activity>
